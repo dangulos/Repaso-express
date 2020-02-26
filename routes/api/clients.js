@@ -31,9 +31,6 @@ router.get('/:id', (req,res)=>{
       if(err){
         console.error('no entry found');
       }
-      console.log(req.params.id);
-      console.log({'uniqueId': req.params.id});
-      console.log(doc);
       res.json(doc);
     });
 
@@ -73,7 +70,7 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-  ClientData.findByIdAndRemove(req.params.id).exec();
+  ClientData.findOneAndDelete({'uniqueId': req.params.id}).exec();
   res.redirect("/api/clients/");
 });
 
