@@ -4,7 +4,7 @@ const path = require('path');
 const exphbs  = require('express-handlebars');
 //mongoose
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost:27017/examen', {useNewUrlParser: true, useUnifiedTopology: true});
 
 
 
@@ -42,7 +42,9 @@ app.get('/',(req,res)=> res.render('index', {
 //static
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/members', require('./routes/api/members'));
+app.use('/api/clients', require('./routes/api/clients'));
+app.use('/api/vehicles', require('./routes/api/vehicles'));
+app.use('/api/sales', require('./routes/api/sales'));
 
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));
 

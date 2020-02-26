@@ -1,0 +1,3 @@
+mongoimport --db examen --collection Sales --type csv --headerline --file ./csv/Sales.csv
+mongoimport --db examen --collection Clients --type csv --headerline --file ./csv/Clients.csv   
+mongoimport --db examen --collection Vehicles --type csv --headerline --file ./csv/Vehicles.csv  
