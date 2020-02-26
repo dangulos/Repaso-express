@@ -4,7 +4,12 @@ const uuid = require('uuid');
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-
+var memberSchema = new Schema({
+    id: Number(),
+    name: 'John Doe',
+    email: 'john@gmail.com',
+    status: 'active'
+})
 
 //Check
 const members = require('../../members.js');
