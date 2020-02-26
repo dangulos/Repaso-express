@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const uuid = require('uuid');
-const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+//const mongoose = require('mongoose');
+//var Schema = mongoose.Schema;
 
 
 
