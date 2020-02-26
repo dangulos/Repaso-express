@@ -5,31 +5,37 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var memberSchema = new Schema({
-    id: Number(),
-    name: 'John Doe',
-    email: 'john@gmail.com',
-    status: 'active'
-})
+    name: String,
+    email: String,
+    status: String
+});
+
+//Model
+
+var MemberData = mongoose.model('MemberData', memberSchema);
 
 //Check
 const members = require('../../members.js');
 
 router.get('/', (req, res)=>{
-    res.json(members);
+    //res.json(members);
+    MemberData.find().then(e => {
+      res.json(e);
+    });
 });
 
 router.get('/:id', (req,res)=>{
-    const found = members.some(member => member.id == req.params.id);
-    if(found){
-        res.json(members.filter(member => member.id == req.params.id));
-    }else{
-        res.status(400).json({msg: `No member with de id ${req.params.id} found`});
-    }
+    MemberData.findById(req.params.id, (err, doc)=>{
+      if(err){
+        console.error('no entry found');
+      }
+      res.json(doc);
+    });
+
 });
 
 router.post('/', (req, res)=>{
     const newMember = {
-        id: uuid.v4(),
         name: req.body.name,
         email: req.body.email,
         status: 'active'
@@ -38,40 +44,28 @@ router.post('/', (req, res)=>{
     if(!newMember.name || !newMember.email){
         res.status(400).json({msg:`invalid format`});
     }else{
-        members.push(newMember);
-        res.json(members);
+        var data = new MemberData(newMember);
+        data.save();
+        res.redirect("/api/members/");
     }
 });
 
 router.put('/:id', (req, res) => {
-  const found = members.some(member => member.id == req.params.id);
-
-  if (found) {
-    const updMember = req.body;
-    members.forEach(member => {
-      if (member.id ==req.params.id) {
-        member.name = updMember.name ? updMember.name : member.name;
-        member.email = updMember.email ? updMember.email : member.email;
-
-        res.json({ msg: 'Member updated', member });
+  MemberData.findById(req.params.id, (err, doc)=>{
+      if(err){
+        console.error('no entry found');
       }
+      doc.name = req.body.name;
+      doc.email = req.body.email;
+      doc.status = req.body.status;
+      res.json(doc);
     });
-  } else {
-    res.status(400).json({ msg: `No member with the id of ${req.params.id}` });
-  }
+    res.redirect("/api/members/");
 });
 
 router.delete('/:id', (req, res) => {
-  const found = members.some(member => member.id == req.params.id);
-
-  if (found) {
-    res.json({
-      msg: 'Member deleted',
-      members: members.filter(member => member.id != req.params.id)
-    });
-  } else {
-    res.status(400).json({ msg: `No member with the id of ${req.params.id}` });
-  }
+  MemberData.findByIdAndRemove(req.params.id).exec();
+  res.redirect("/api/members/");
 });
 
 
